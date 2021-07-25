@@ -1,23 +1,76 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react'
 import './App.css';
+import './styles/main.css'
+import Container from './components/Container';
+import List from './components/List';
+import TaskContext from './contexts/TaskContext'
+import AddTask from './components/AddTask';
 
 function App() {
+  const [tasks, setTasks] = useState([])
+
+  useEffect(() => {
+    let tasks = localStorage.getItem('tasks')
+    if(tasks) {
+      try {
+        tasks = JSON.parse(tasks)
+        setTasks(tasks)
+      } catch(err) {}
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks))
+  }, [tasks])
+
+  const addTask = (task) => {
+    task.id = tasks.length;
+    setTasks([...tasks, task])
+  }
+
+  const removeTask = (taskId) => {
+    const final = tasks.filter((task) => task.id !== taskId)
+    setTasks(final)
+  }
+
+  const toggleDone = (taskId) => {
+    const duplicate = [...tasks]
+    const task = duplicate.find((task) => task.id === taskId)
+    if(!task) return
+    task.done = !task.done
+    setTasks(duplicate)
+  }
+
+  const updateTask = (taskId, title) => {
+    const duplicate = [...tasks]
+    const task = duplicate.find((task) => task.id === taskId)
+    if(!task) return
+    task.title = title
+    setTasks(duplicate)
+  }
+
+  useEffect(() => {
+    document.title = 'To-do App'
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <Container>
+        <h1>Some To-do App</h1>
+        <TaskContext.Provider
+          value={{
+            tasks,
+            addTask,
+            toggleDone,
+            updateTask,
+            removeTask
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          <AddTask />
+          <List />
+        </TaskContext.Provider>
+      </Container>
+      
     </div>
   );
 }
