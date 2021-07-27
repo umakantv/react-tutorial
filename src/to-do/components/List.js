@@ -1,13 +1,10 @@
-import React, { useContext } from 'react'
-import TaskContext from '../contexts/TaskContext'
+import React from 'react'
 import Task from './Task'
 
 export default function List() {
-    
-    const {tasks} = useContext(TaskContext)
 
-    const incomplete = tasks.filter(task => !task.done)
-    const complete = tasks.filter(task => task.done)
+    const incomplete = []
+    const complete = []
 
     return (
         <div>

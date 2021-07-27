@@ -9,6 +9,7 @@ export default function Form({initial = '', onSubmit}) {
         onSubmit({ title })
         setTitle('')
     }
+    
     return (
         <form className='row' onSubmit={submit}>
             <div className='stretch'>
