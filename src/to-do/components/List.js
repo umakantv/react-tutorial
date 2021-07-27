@@ -8,11 +8,14 @@ export default function List() {
 
     return (
         <div>
+            <h3>To be done</h3>
+            <hr />
             {
                 incomplete.map((task, index) => {
                     return <Task key={String(task.id)} id={task.id} />
                 })
             }
+            <h3>Completed</h3>
             <hr />
             {
                 complete.map((task, index) => {
