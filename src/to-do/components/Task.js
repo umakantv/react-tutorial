@@ -1,17 +1,26 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
+import TaskContext from '../context/TaskContext'
 
 export default function Task({id}) {
 
-    const [editing, setEditing] = useState(false)
+    const {tasks, removeTask, toggleComplete} = useContext(TaskContext)
+
+    const task = tasks.find(task => id === task.id)
+    if(!task) {
+        return ''
+    }
 
     return (
         <div className='task row'>
             <div>
-                <input type='checkbox' />
+                <input type='checkbox' checked={task.done} onChange={() => toggleComplete(id)} />
+            </div>
+            <div className='stretch'>
+                <h3 style={{textDecoration: task.done ? 'line-through': 'none'}}>{task.title}</h3>
+
             </div>
             <div className='row'>
-                <button onClick={() => setEditing(!editing)}>{editing ? 'Cancel' : 'Edit'}</button>
-                <button className='danger' >Delete</button>
+                <button className='danger' onClick={() => removeTask(id)}>Delete</button>
             </div>
         </div>
     )
